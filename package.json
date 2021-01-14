@@ -1,0 +1,38 @@
+{
+  "name": "todolist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "dependencies": {
+    "express": "4",
+    "http-errors": "1",
+    "lodash": "^4.17.20",
+    "morgan": "1.9"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tellTruth": "echo 'Ty jestes moim sloneczkiem :D :D :D'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/katarinarosiak/todolist_project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/katarinarosiak/todolist_project/issues"
+  },
+  "homepage": "https://github.com/katarinarosiak/todolist_project#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.17.0",
+    "eslint-cli": "^1.1.1"
+  }
+}

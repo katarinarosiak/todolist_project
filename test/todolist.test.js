@@ -18,76 +18,72 @@ describe('TodoList', () => {
     list.add(todo3);
   });
 
-  test('todolist has a size of 3', () => {
+  test('calling size returns the size of the todolist', () => {
     expect(list.size()).toBe(3);
   });
 
-  test('the list as an array', () => {
+  test('calling first returns the first todo item', () => {
+    expect(list.first()).toEqual(todo1);
+  });
+
+  test('calling last returns the last todo item', () => {
+    expect(list.last()).toEqual(todo3);
+  });
+
+  test('calling toArray returns the list in array form', () => {
     expect(list.toArray()).toEqual([todo1, todo2, todo3]);
   });
 
-  test('first returns is a first el of the lest ', () => {
-    expect(list.first()).toBe(todo1);
-  });
-
-  test('last element is equal to todo3'), () => {
-    expect(list.last()).toBe(todo3);
-  };
-
-  test('shift to remove the first element and returns it'), () => {
+  test('shift() removes first item in list and returns it', () => {
     let todo = list.shift();
-
-    expect(todo).toBe(todo1);
+    expect(todo).toEqual(todo1);
     expect(list.toArray()).toEqual([todo2, todo3]);
-  };
+  });
 
-  test('pop() removes the last element from the list and returns it', () => {
+  test('pop() removes last item in list and returns it', () => {
     let todo = list.pop();
-
-    expect(todo).toBe(todo3);
-    expect(list.toArray().toEqual([todo1, todo2]));
+    expect(todo).toEqual(todo3);
+    expect(list.toArray()).toEqual([todo1, todo2]);
   });
 
-  test('isDone() returns true if all of the items are done and false otherwise', () => {
-    expect(list.isDone).toBe(false);
-
-    list.markAllDone();
-    expect(list.isDone).toBe(true);
+  test('isDone returns false if not all todos done', () => {
+    expect(list.isDone()).toBe(false);
   });
 
-  test('TypeError occures when trying to add an item to the list that is not a todo object and add an item to the list otherwise', () => {
-    expect(list.add('test')).toThrow(TypeError);
-    expect(list.add(1)).toThrow(TypeError);
-  })
-
-  test("itemAt() returns an element from given index and raises an error if we don't give a proper index as argument", () => {
-    expect(list.itemAt(0)).toBe(todo1);
-    expect(() => list.itemAt()).toThrow(ReferenceError);
-    expect(() => list.itemAt(-1)).toThrow(ReferenceError);
+  test('add throws error when non todo item is added', () => {
+    expect(() => list.add(1)).toThrow(TypeError);
+    expect(() => list.add('hi')).toThrow(TypeError);
   });
 
-  test('markDoneAt() raise an error if invalid index is passed as an argument and change the satus of an item on specified positon to done', () => {
+  test('itemAt returns the item at given index', () => {
+    expect(list.itemAt(0)).toEqual(todo1);
+    expect(list.itemAt(1)).toEqual(todo2);
+    expect(() => list.itemAt(5)).toThrow(ReferenceError);
+  });
 
-    expect(() => list.markDoneAt(-1).toThrow(ReferenceError));
-    expect(() => list.markDoneAt(7).toThrow(ReferenceError));
-    list.markDone(0);
+  test('markDoneAt marks todo at given index done', () => {
+    expect(() => list.markDoneAt(6)).toThrow(ReferenceError);
+
+    list.markDoneAt(1);
+    expect(todo1.isDone()).toBe(false);
+    expect(todo2.isDone()).toBe(true);
+    expect(todo3.isDone()).toBe(false);
+  });
+
+  test('markUndoneAt marks todo at given index undone', () => {
+    expect(() => list.markDoneAt(6)).toThrow(ReferenceError);
+    todo1.markDone();
+    todo2.markDone();
+    todo3.markDone();
+
+    list.markUndoneAt(1);
+
     expect(todo1.isDone()).toBe(true);
     expect(todo2.isDone()).toBe(false);
+    expect(todo3.isDone()).toBe(true);
   });
 
-
-  test('markUndoneAt() raise an error if invalid index is passed as an argument and change the satus of an item on specified positon to undone ', () => {
-
-    expect(() => list.markDoneAt(-1).toThrow(ReferenceError));
-    expect(() => list.markDoneAt(7).toThrow(ReferenceError));
-    list.markDoneAt(0);
-    list.markUndoneAt(0);
-    list.markDoneAt(1)
-    expect(todo1.isDone()).toBe(false);
-    expect(todo1.isDone()).toBe(true);
-  });
-
-  test('markAllDone() change status of all the items on the list to done', () => {
+  test('markAllDone marks all todos in list done', () => {
     list.markAllDone();
     expect(todo1.isDone()).toBe(true);
     expect(todo2.isDone()).toBe(true);
@@ -95,59 +91,58 @@ describe('TodoList', () => {
     expect(list.isDone()).toBe(true);
   });
 
-  test('removeAt raises an RefferenceError if the index is not valid and removes an item on the specified position and returns that item', () => {
-    expect(() => list.markDoneAt(-1).toThrow(ReferenceError));
-    expect(() => list.markDoneAt(7).toThrow(ReferenceError));
-
-    let removedItem = list.removeAt(0);
-    expect(removedItem).toBe(todo1);
-    expect(list.toArray()).toBe([todo2, todo3]);
+  test('removeAt removes todo at given index', () => {
+    expect(() => list.removeAt(6)).toThrow(ReferenceError);
+    list.removeAt(1);
+    expect(list.toArray()).toEqual([todo1, todo3]);
   });
 
-  test('list.toString() log to console a string representation of the list ', () => {
-
+  test('toString returns string representation of the list', () => {
     let string = `---- Today's Todos ----
-   [] Buy milk
-   [] Clean room
-   [] Go to the gym`;
+[ ] Buy milk
+[ ] Clean room
+[ ] Go to the gym`;
 
     expect(list.toString()).toBe(string);
   });
 
-  test('toString is loging to console string represantataion of the list with X if one item is done ', () => {
-    list.markDoneAt(0);
-
+  test('toString returns different string for done todo', () => {
     let string = `---- Today's Todos ----
-    [X] Buy milk
-    [] Clean room
-    [] Go to the gym`;
+[ ] Buy milk
+[X] Clean room
+[ ] Go to the gym`;
+
+    list.markDoneAt(1);
 
     expect(list.toString()).toBe(string);
-
-
   });
 
-  test('toString is loging to console string represantataion of the list with X if all items are done ', () => {
+  test('toString returns different string for all done todos', () => {
+    let string = `---- Today's Todos ----
+[X] Buy milk
+[X] Clean room
+[X] Go to the gym`;
+
     list.markAllDone();
 
-    let string = `---- Today's Todos ----
-    [X] Buy milk
-    [X] Clean room
-    [X] Go to the gym`;
-
     expect(list.toString()).toBe(string);
   });
 
-  test('forEach is iterating through all elements of the array', () => {
+  test('forEach iterates over all todos', () => {
+    let result = [];
+    list.forEach(todo => result.push(todo));
 
-    let allElements = [];
-    list.toArray().forEach(el => allElements.push(el));
-    expect(allElements).toEqual([todo1, todo2, todo3]);
+    expect(list.toArray()).toEqual([todo1, todo2, todo3]);
   });
 
-  test('filter iterate through all elements of teh array and returns a new object with all elements that the callback returns truthy value for', () => {
+  test('filter returns new TodoList object with filtered todos', () => {
+    todo1.markDone();
+    let newList = new TodoList(list.title);
+    newList.add(todo1);
 
+    expect(newList.title).toBe(list.title);
 
+    let doneItems = list.filter(todo => todo.isDone());
+    expect(doneItems.toString()).toBe(newList.toString());
   });
 });
-
